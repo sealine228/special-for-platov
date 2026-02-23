@@ -24,10 +24,9 @@ body {
   width: 90%;
   max-width: 500px;
   text-align: center;
-  margin: 100px auto;
+  margin: 80px auto;
   box-shadow: 0 0 40px rgba(0,0,0,0.4);
   animation: fadeIn 1.5s ease forwards;
-  transition: all 0.6s ease;
 }
 
 .card.merc { animation: glowCard 2s infinite alternate; }
@@ -76,39 +75,44 @@ button:hover {
   to { text-shadow: 0 0 10px #ffeb3b, 0 0 25px #ffd700; }
 }
 
+.case-wrapper {
+  position: relative;
+  max-width: 450px;
+  margin: 20px auto 0 auto;
+  perspective: 600px;
+}
+
+.case-lid {
+  height: 20px;
+  background: #ffd700;
+  border-radius: 6px 6px 0 0;
+  transform-origin: top;
+  transition: transform 0.6s ease;
+}
+
+.case-lid.open {
+  transform: rotateX(-70deg);
+}
+
 .case-text {
   display: none;
-  margin-top: 20px;
   background: rgba(255,255,255,0.2);
-  border-radius: 12px 12px 0 0;
-  padding: 0;
-  max-width: 450px;
-  margin-left: auto;
-  margin-right: auto;
-  overflow: hidden;
-  transform: scaleY(0);
+  border-radius: 0 0 12px 12px;
+  padding: 20px;
   transform-origin: top;
   transition: transform 0.7s ease;
   box-shadow: 0 0 15px rgba(255,215,0,0.5);
 }
 
 .case-text.open {
-  transform: scaleY(1);
-}
-
-.divider {
-  height: 1px;
-  width: 60%;
-  margin: 20px auto;
-  background: rgba(255,255,255,0.3);
+  display: block;
 }
 
 .line {
   opacity: 0;
   font-size: 18px;
-  margin: 12px 20px;
+  margin: 8px 0;
   transform: translateY(-20px);
-  padding: 4px 0;
 }
 
 .line.show {
@@ -121,8 +125,6 @@ button:hover {
   from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
-@keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity:1; transform: translateY(0); } }
 
 .star {
   position: absolute;
@@ -175,15 +177,18 @@ button:hover {
 
   <div class="document-btn" id="docBtn" onclick="openCase()">📄 Открыть дело</div>
 
-  <div id="caseText" class="case-text">
-    <p class="line">Дело номер: 001</p>
-    <p class="line">Возбуждено дело</p>
-    <p class="line">По факту кражи улыбок</p>
-    <p class="line">Подозреваемый установлен</p>
-    <p class="line verdict">Примечания следователя: подозреваемый очарователен, обжалованию не подлежит</p>
+  <div class="case-wrapper">
+    <div class="case-lid" id="caseLid"></div>
+    <div id="caseText" class="case-text">
+      <p class="line">Дело номер: 001</p>
+      <p class="line">Возбуждено дело</p>
+      <p class="line">По факту кражи улыбок</p>
+      <p class="line">Подозреваемый установлен</p>
+      <p class="line verdict">Примечания следователя: подозреваемый очарователен, обжалованию не подлежит</p>
+    </div>
   </div>
 
-  <div class="joke" id="joke">🌚</div>
+  <div class="joke" id="joke">Шучу, хотела поднять настроение 🌚</div>
 </div>
 
 <script>
@@ -196,11 +201,11 @@ function showCongrats(){
 }
 
 function openCase(){
+  const lid=document.getElementById("caseLid");
   const caseBlock=document.getElementById("caseText");
-  caseBlock.style.display="block";
-  setTimeout(()=>{ caseBlock.classList.add("open"); },50);
+  lid.classList.add("open");
+  caseBlock.classList.add("open");
 
-  // Построчное появление как выдвижение документа
   const lines=caseBlock.querySelectorAll('.line');
   lines.forEach((line,i)=>{
     setTimeout(()=>{ line.classList.add('show'); }, i*600);
