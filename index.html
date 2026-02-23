@@ -79,24 +79,21 @@ button:hover {
 .case-text {
   display: none;
   margin-top: 20px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 12px;
-  padding: 20px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 12px 12px 0 0;
+  padding: 0;
   max-width: 450px;
   margin-left: auto;
   margin-right: auto;
+  overflow: hidden;
   transform: scaleY(0);
   transform-origin: top;
-  transition: transform 0.7s ease, box-shadow 0.3s ease;
+  transition: transform 0.7s ease;
+  box-shadow: 0 0 15px rgba(255,215,0,0.5);
 }
 
 .case-text.open {
   transform: scaleY(1);
-}
-
-.case-text:hover {
-  box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
-  transition: box-shadow 0.3s ease;
 }
 
 .divider {
@@ -109,8 +106,9 @@ button:hover {
 .line {
   opacity: 0;
   font-size: 18px;
-  margin: 12px 0;
+  margin: 12px 20px;
   transform: translateY(-20px);
+  padding: 4px 0;
 }
 
 .line.show {
@@ -178,13 +176,14 @@ button:hover {
   <div class="document-btn" id="docBtn" onclick="openCase()">📄 Открыть дело</div>
 
   <div id="caseText" class="case-text">
-    <div class="divider"></div>
-    <p class="line">Примечания следователя:</p>
-    <p class="line">подозреваемый очарователен,</p>
-    <p class="line verdict">обжалованию не подлежит</p>
+    <p class="line">Дело номер: 001</p>
+    <p class="line">Возбуждено дело</p>
+    <p class="line">По факту кражи улыбок</p>
+    <p class="line">Подозреваемый установлен</p>
+    <p class="line verdict">Примечания следователя: подозреваемый очарователен, обжалованию не подлежит</p>
   </div>
 
-  <div class="joke" id="joke">Шучу, хотела поднять настроение 😏</div>
+  <div class="joke" id="joke">🌚</div>
 </div>
 
 <script>
@@ -201,9 +200,11 @@ function openCase(){
   caseBlock.style.display="block";
   setTimeout(()=>{ caseBlock.classList.add("open"); },50);
 
-  // Построчное появление текста как выдвижение
+  // Построчное появление как выдвижение документа
   const lines=caseBlock.querySelectorAll('.line');
-  lines.forEach((line,i)=>{ setTimeout(()=>{ line.classList.add('show'); }, i*600); });
+  lines.forEach((line,i)=>{
+    setTimeout(()=>{ line.classList.add('show'); }, i*600);
+  });
 
   setTimeout(()=>{ document.getElementById("joke").style.display="block"; }, lines.length*600+500);
 }
