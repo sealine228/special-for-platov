@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>С 23 февраля!</title>
+
 <style>
 body {
   margin: 0;
@@ -13,6 +14,7 @@ body {
   color: white;
 }
 
+/* Карточка */
 .card {
   position: relative;
   z-index: 2;
@@ -25,10 +27,22 @@ body {
   margin: 100px auto;
   box-shadow: 0 0 40px rgba(0,0,0,0.8);
   animation: fadeIn 1.5s ease forwards;
+  transition: all 0.6s ease;
+}
+
+.card.opened {
+  background: rgba(0,0,0,0.88);
+  box-shadow: 0 0 60px rgba(197,161,0,0.4);
+  transform: scale(1.03);
 }
 
 h1 { font-size: 32px; }
-p { font-size: 18px; line-height: 1.6; }
+
+.main-text {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-top: 15px;
+}
 
 button {
   margin-top: 25px;
@@ -38,9 +52,55 @@ button {
   border-radius: 30px;
   background: #c5a100;
   cursor: pointer;
+  transition: 0.3s;
 }
 
-button:hover { background: #ffd700; }
+button:hover { 
+  background: #ffd700; 
+  transform: scale(1.05);
+}
+
+/* Блок дела */
+.case-text {
+  display: none;
+  margin-top: 30px;
+}
+
+.divider {
+  height: 1px;
+  width: 60%;
+  margin: 20px auto;
+  background: rgba(255,255,255,0.3);
+}
+
+.line {
+  opacity: 0;
+  font-size: 18px;
+  margin: 12px 0;
+}
+
+.verdict {
+  margin-top: 20px;
+  font-size: 20px;
+  color: #c5a100;
+  font-weight: bold;
+}
+
+/* Появление строк */
+.show .line:nth-child(2) { animation: fadeLine 1s forwards 0.5s; }
+.show .line:nth-child(3) { animation: fadeLine 1s forwards 2s; }
+.show .line:nth-child(4) { animation: fadeLine 1s forwards 3.5s; }
+.show .line:nth-child(5) { animation: fadeLine 1s forwards 5s; }
+
+@keyframes fadeLine {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 /* Звёзды */
 .star {
@@ -57,20 +117,44 @@ button:hover { background: #ffd700; }
 }
 </style>
 </head>
+
 <body>
 
 <div class="card">
   <h1>С 23 февраля!</h1>
-  <p>
-    Алтыным ❤️
-  </p>
-  <button onclick="alert('Желаю стальных нервов, бетонного здоровья, финансовой стабильности и процветания 💪❤️')">
+  
+  <div class="main-text">
+    Алтыным ❤️ <br><br>
+    Желаю стальных нервов, бетонного здоровья,
+    финансовой стабильности и процветания 💪❤️
+  </div>
+
+  <button onclick="openCase(this)">
     Нажми
   </button>
+
+  <div id="caseText" class="case-text">
+    <div class="divider"></div>
+    <p class="line">Возбуждено дело</p>
+    <p class="line">по факту кражи моего интереса.</p>
+    <p class="line">Подозреваемый установлен.</p>
+    <p class="line verdict">Приговор обжалованию не подлежит.</p>
+  </div>
 </div>
 
 <script>
-// создаём падающие звёзды
+function openCase(btn) {
+  btn.style.display = "none";
+
+  const card = document.querySelector(".card");
+  card.classList.add("opened");
+
+  let caseBlock = document.getElementById("caseText");
+  caseBlock.style.display = "block";
+  caseBlock.classList.add("show");
+}
+
+// падающие звёзды
 for (let i = 0; i < 80; i++) {
   let star = document.createElement("div");
   star.className = "star";
