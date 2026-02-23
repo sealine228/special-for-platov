@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>С 23 февраля!</title>
 <style>
 body {
@@ -19,12 +19,12 @@ body {
   position: relative;
   z-index: 2;
   background: rgba(255,255,255,0.1);
-  padding: 40px;
+  padding: 30px;
   border-radius: 20px;
-  width: 90%;
-  max-width: 500px;
+  width: 400px;      /* фиксированная ширина */
+  max-width: 100%;   /* не вылезает на маленьких экранах */
   text-align: center;
-  margin: 80px auto;
+  margin: 50px auto;
   box-shadow: 0 0 40px rgba(0,0,0,0.4);
   animation: fadeIn 1.5s ease forwards;
 }
@@ -36,10 +36,10 @@ body {
   to { box-shadow: 0 0 70px rgba(255,215,0,0.8); }
 }
 
-h1 { font-size: 32px; }
+h1 { font-size: 28px; }
 
 .main-text {
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1.6;
   margin-top: 15px;
 }
@@ -62,7 +62,7 @@ button:hover {
 
 .congrats {
   display: none;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: bold;
   color: #ffeb3b;
   margin-top: 20px;
@@ -75,9 +75,10 @@ button:hover {
   to { text-shadow: 0 0 10px #ffeb3b, 0 0 25px #ffd700; }
 }
 
+/* Раскрывающаяся папка */
 .case-wrapper {
   position: relative;
-  max-width: 450px;
+  max-width: 400px;
   margin: 20px auto 0 auto;
   perspective: 600px;
 }
@@ -102,6 +103,7 @@ button:hover {
   transform-origin: top;
   transition: transform 0.7s ease;
   box-shadow: 0 0 15px rgba(255,215,0,0.5);
+  font-size: 16px;
 }
 
 .case-text.open {
@@ -110,7 +112,6 @@ button:hover {
 
 .line {
   opacity: 0;
-  font-size: 18px;
   margin: 8px 0;
   transform: translateY(-20px);
 }
@@ -159,6 +160,13 @@ button:hover {
   animation: confettiFall linear infinite;
 }
 @keyframes confettiFall { to { transform: translateY(110vh) rotate(360deg); } }
+
+/* Адаптация на телефоны */
+@media screen and (max-width: 420px) {
+  .card { width: 90%; padding: 20px; }
+  h1 { font-size: 24px; }
+  .main-text, .line, .joke { font-size: 14px; }
+}
 </style>
 </head>
 <body>
