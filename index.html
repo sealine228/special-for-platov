@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>С 23 февраля!</title>
-
 <style>
 body {
   margin: 0;
@@ -31,10 +30,11 @@ body {
   transition: all 0.6s ease;
 }
 
-.card.opened {
-  background: rgba(255,255,255,0.2);
-  box-shadow: 0 0 80px rgba(255, 215, 0, 0.6);
-  transform: scale(1.03);
+.card.merc { animation: glowCard 2s infinite alternate; }
+
+@keyframes glowCard {
+  from { box-shadow: 0 0 40px rgba(255,215,0,0.5); }
+  to { box-shadow: 0 0 70px rgba(255,215,0,0.8); }
 }
 
 h1 { font-size: 32px; }
@@ -67,7 +67,13 @@ button:hover {
   font-weight: bold;
   color: #ffeb3b;
   margin-top: 20px;
-  animation: fadeLine 1s forwards;
+  animation: fadeLine 1s forwards, glow 2s infinite alternate;
+  text-shadow: 0 0 5px #ffeb3b, 0 0 15px #ffd700;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 5px #ffeb3b, 0 0 15px #ffd700; }
+  to { text-shadow: 0 0 10px #ffeb3b, 0 0 25px #ffd700; }
 }
 
 .case-text {
@@ -108,15 +114,12 @@ button:hover {
 
 .verdict {
   margin-top: 20px;
-  font-size: 20px;
+  font-size: 18px;
   color: #ffd700;
   font-weight: bold;
 }
 
 .show .line:nth-child(1) { animation: fadeLine 1s forwards 0.5s; }
-.show .line:nth-child(2) { animation: fadeLine 1s forwards 1.5s; }
-.show .line:nth-child(3) { animation: fadeLine 1s forwards 2.5s; }
-.show .line:nth-child(4) { animation: fadeLine 1s forwards 3.5s; }
 
 @keyframes fadeLine {
   from { opacity: 0; transform: translateY(8px); }
@@ -147,7 +150,7 @@ button:hover {
 }
 
 .document-btn {
-  display: inline-block;
+  display: none; /* появляется после поздравления */
   margin-top: 15px;
   font-size: 16px;
   cursor: pointer;
@@ -170,88 +173,92 @@ button:hover {
   font-style: italic;
   animation: fadeLine 1s forwards;
 }
+
+/* Конфетти */
+.confetti {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #ffd700;
+  opacity: 0.8;
+  top: -10px;
+  border-radius: 50%;
+  animation: confettiFall linear infinite;
+}
+@keyframes confettiFall {
+  to { transform: translateY(110vh) rotate(360deg); }
+}
 </style>
 </head>
-
 <body>
 
-<div class="card">
+<div class="card" id="card">
   <h1>С 23 февраля!</h1>
-  
+
   <div class="main-text">
     Алтыным ❤️ <br>
     Желаю здоровья, счастья, стальных нервов, финансовой стабильности и процветания
   </div>
 
-  <button onclick="showCongrats(this)">
-    Нажми
-  </button>
+  <button id="btnCongrats" onclick="showCongrats()">Нажми</button>
 
- <div class="congrats" style="
-  font-size:24px;
-  font-weight:bold;
-  color:#ffeb3b;
-  text-shadow: 0 0 5px #ffeb3b, 0 0 15px #ffd700;
-  animation: glow 2s infinite alternate;
-">
-  С Днём защитника Отечества!
-</div>
-
-<style>
-@keyframes glow {
-  from { text-shadow: 0 0 5px #ffeb3b, 0 0 15px #ffd700; }
-  to { text-shadow: 0 0 10px #ffeb3b, 0 0 25px #ffd700; }
-}
-</style>
-
-  <div class="document-btn" onclick="openCase()">
-    📄 Открыть дело
+  <div class="congrats" id="congrats">
+    С Днём защитника Отечества!
   </div>
+
+  <div class="document-btn" id="docBtn" onclick="openCase()">📄 Открыть дело</div>
 
   <div id="caseText" class="case-text">
     <div class="divider"></div>
-    <p class="line">Возбуждено дело</p>
-    <p class="line">по факту похищения улыбок.</p>
-    <p class="line">Подозреваемый установлен.</p>
-    <p class="line verdict">Примечания следователя:подозреваемый очарователен,обжалованию не подлежит.</p>
+    <p class="line verdict">Примечания следователя:подозреваемый очарователен,обжалованию не подлежит</p>
   </div>
 
-  <div class="joke" id="joke">
-    Шучу, хотела поднять настроение 
-  </div>
+  <div class="joke" id="joke">Шучу, хотела поднять настроение 😏</div>
 </div>
 
 <script>
-function showCongrats(btn){
-  btn.style.display = "none"; 
-  document.getElementById("congrats").style.display = "block";
+// Появление поздравления
+function showCongrats(){
+  document.getElementById("btnCongrats").style.display = "none";
+  const congrats = document.getElementById("congrats");
+  congrats.style.display = "block";
+
+  // Включаем мерцание карточки
+  document.getElementById("card").classList.add("merc");
+
+  // Показываем кнопку открытия дела через 1.5 сек
+  setTimeout(()=> {
+    document.getElementById("docBtn").style.display = "inline-block";
+  }, 1500);
+
+  // Запускаем конфетти
+  createConfetti(50);
 }
 
-// Открываем дело с плавной анимацией "выдвижения"
+// Открываем дело
 function openCase(){
-  const card = document.querySelector(".card");
-  card.classList.add("opened");
-
-  let caseBlock = document.getElementById("caseText");
+  const caseBlock = document.getElementById("caseText");
   caseBlock.style.display = "block";
-
-  // С плавным выдвижением
-  setTimeout(() => {
-    caseBlock.classList.add("open");
-  }, 50);
-
-  // Появление текста построчно
-  setTimeout(() => {
-    caseBlock.classList.add("show");
-  }, 600);
-
-  // Шутка появляется после анимации всех строк
-  setTimeout(()=>{
-    document.getElementById("joke").style.display = "block";
-  }, 4500);
+  setTimeout(()=> { caseBlock.classList.add("open"); }, 50);
+  setTimeout(()=> { caseBlock.classList.add("show"); }, 300);
+  setTimeout(()=> { document.getElementById("joke").style.display = "block"; }, 1500);
 }
 
-// Мерцающие разноцветные звёзды
+// Падающее конфетти
+function createConfetti(count){
+  for(let i=0;i<count;i++){
+    let c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random()*window.innerWidth+"px";
+    c.style.backgroundColor = ["#ffd700","#ff6b6b","#6bc5ff","#ff9f43","#a29bfe"][Math.floor(Math.random()*5)];
+    c.style.width = c.style.height = (5+Math.random()*5)+"px";
+    c.style.animationDuration = (3+Math.random()*3)+"s";
+    document.body.appendChild(c);
+    setTimeout(()=>{ c.remove(); }, 6000);
+  }
+}
+
+// Звёзды
 const colors = ["#ffffff","#ffd700","#74b9ff","#a29bfe","#ffe066"];
 for(let i=0;i<150;i++){
   let star = document.createElement("div");
