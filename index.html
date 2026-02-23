@@ -110,26 +110,21 @@ button:hover {
   opacity: 0;
   font-size: 18px;
   margin: 12px 0;
+  transform: translateY(-20px);
 }
 
-.verdict {
-  margin-top: 20px;
-  font-size: 18px;
-  color: #ffd700;
-  font-weight: bold;
+.line.show {
+  animation: slideIn 0.8s forwards;
 }
 
-.show .line:nth-child(1) { animation: fadeLine 1s forwards 0.5s; }
+.verdict { color: #ffd700; font-weight: bold; }
 
-@keyframes fadeLine {
-  from { opacity: 0; transform: translateY(8px); }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity:1; transform: translateY(0); } }
 
 .star {
   position: absolute;
@@ -139,18 +134,11 @@ button:hover {
   box-shadow: 0 0 3px rgba(255,255,255,0.8);
 }
 
-@keyframes fall {
-  from { transform: translateY(-10px); }
-  to { transform: translateY(110vh); }
-}
-
-@keyframes twinkle {
-  from { opacity: 0.3; }
-  to { opacity: 1; }
-}
+@keyframes fall { from { transform: translateY(-10px); } to { transform: translateY(110vh); } }
+@keyframes twinkle { from { opacity:0.3; } to { opacity:1; } }
 
 .document-btn {
-  display: none; /* появляется после поздравления */
+  display: none;
   margin-top: 15px;
   font-size: 16px;
   cursor: pointer;
@@ -159,35 +147,18 @@ button:hover {
   text-decoration: underline;
   transition: 0.3s;
 }
+.document-btn:hover { color:#fff176; text-shadow:0 0 8px #ffd700; }
 
-.document-btn:hover {
-  color: #fff176;
-  text-shadow: 0 0 8px #ffd700;
-}
+.joke { display:none; font-size:16px; margin-top:15px; color:#fff176; font-style:italic; animation:fadeLine 1s forwards; }
 
-.joke {
-  display: none;
-  font-size: 16px;
-  margin-top: 15px;
-  color: #fff176;
-  font-style: italic;
-  animation: fadeLine 1s forwards;
-}
-
-/* Конфетти */
 .confetti {
   position: absolute;
-  width: 8px;
-  height: 8px;
-  background-color: #ffd700;
-  opacity: 0.8;
-  top: -10px;
-  border-radius: 50%;
+  width: 8px; height:8px;
+  border-radius:50%;
+  top:-10px;
   animation: confettiFall linear infinite;
 }
-@keyframes confettiFall {
-  to { transform: translateY(110vh) rotate(360deg); }
-}
+@keyframes confettiFall { to { transform: translateY(110vh) rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -202,75 +173,66 @@ button:hover {
 
   <button id="btnCongrats" onclick="showCongrats()">Нажми</button>
 
-  <div class="congrats" id="congrats">
-    С Днём защитника Отечества!
-  </div>
+  <div class="congrats" id="congrats">С Днём защитника Отечества!</div>
 
   <div class="document-btn" id="docBtn" onclick="openCase()">📄 Открыть дело</div>
 
   <div id="caseText" class="case-text">
     <div class="divider"></div>
-    <p class="line verdict">Примечания следователя:подозреваемый очарователен,обжалованию не подлежит</p>
+    <p class="line">Примечания следователя:</p>
+    <p class="line">подозреваемый очарователен,</p>
+    <p class="line verdict">обжалованию не подлежит</p>
   </div>
 
   <div class="joke" id="joke">Шучу, хотела поднять настроение 😏</div>
 </div>
 
 <script>
-// Появление поздравления
 function showCongrats(){
-  document.getElementById("btnCongrats").style.display = "none";
-  const congrats = document.getElementById("congrats");
-  congrats.style.display = "block";
-
-  // Включаем мерцание карточки
+  document.getElementById("btnCongrats").style.display="none";
+  document.getElementById("congrats").style.display="block";
   document.getElementById("card").classList.add("merc");
-
-  // Показываем кнопку открытия дела через 1.5 сек
-  setTimeout(()=> {
-    document.getElementById("docBtn").style.display = "inline-block";
-  }, 1500);
-
-  // Запускаем конфетти
+  setTimeout(()=>{ document.getElementById("docBtn").style.display="inline-block"; },1500);
   createConfetti(50);
 }
 
-// Открываем дело
 function openCase(){
-  const caseBlock = document.getElementById("caseText");
-  caseBlock.style.display = "block";
-  setTimeout(()=> { caseBlock.classList.add("open"); }, 50);
-  setTimeout(()=> { caseBlock.classList.add("show"); }, 300);
-  setTimeout(()=> { document.getElementById("joke").style.display = "block"; }, 1500);
+  const caseBlock=document.getElementById("caseText");
+  caseBlock.style.display="block";
+  setTimeout(()=>{ caseBlock.classList.add("open"); },50);
+
+  // Построчное появление текста как выдвижение
+  const lines=caseBlock.querySelectorAll('.line');
+  lines.forEach((line,i)=>{ setTimeout(()=>{ line.classList.add('show'); }, i*600); });
+
+  setTimeout(()=>{ document.getElementById("joke").style.display="block"; }, lines.length*600+500);
 }
 
-// Падающее конфетти
 function createConfetti(count){
   for(let i=0;i<count;i++){
-    let c = document.createElement("div");
-    c.className = "confetti";
-    c.style.left = Math.random()*window.innerWidth+"px";
-    c.style.backgroundColor = ["#ffd700","#ff6b6b","#6bc5ff","#ff9f43","#a29bfe"][Math.floor(Math.random()*5)];
-    c.style.width = c.style.height = (5+Math.random()*5)+"px";
-    c.style.animationDuration = (3+Math.random()*3)+"s";
+    let c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*window.innerWidth+"px";
+    c.style.width=c.style.height=(5+Math.random()*5)+"px";
+    c.style.backgroundColor=["#ffd700","#ff6b6b","#6bc5ff","#ff9f43","#a29bfe"][Math.floor(Math.random()*5)];
+    c.style.animationDuration=(3+Math.random()*3)+"s";
     document.body.appendChild(c);
-    setTimeout(()=>{ c.remove(); }, 6000);
+    setTimeout(()=>{ c.remove(); },6000);
   }
 }
 
 // Звёзды
-const colors = ["#ffffff","#ffd700","#74b9ff","#a29bfe","#ffe066"];
+const colors=["#ffffff","#ffd700","#74b9ff","#a29bfe","#ffe066"];
 for(let i=0;i<150;i++){
-  let star = document.createElement("div");
+  let star=document.createElement("div");
   star.className="star";
-  star.style.left = Math.random()*window.innerWidth+"px";
-  star.style.width = star.style.height = (1 + Math.random()*3)+"px";
-  star.style.background = colors[Math.floor(Math.random()*colors.length)];
-  star.style.animationDuration = (3 + Math.random()*5)+"s";
-  star.style.opacity = 0.3 + Math.random()*0.7;
+  star.style.left=Math.random()*window.innerWidth+"px";
+  star.style.width=star.style.height=(1+Math.random()*3)+"px";
+  star.style.background=colors[Math.floor(Math.random()*colors.length)];
+  star.style.animationDuration=(3 + Math.random()*5)+"s";
+  star.style.opacity=0.3 + Math.random()*0.7;
   document.body.appendChild(star);
 }
 </script>
-
 </body>
 </html>
