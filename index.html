@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>С 23 февраля!</title>
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1f2a1f, #3a4a2f);
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+.card {
+  position: relative;
+  z-index: 2;
+  background: rgba(0,0,0,0.7);
+  padding: 40px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+  margin: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 0 30px rgba(0,0,0,0.6);
+}
+
+h1 { font-size: 32px; }
+p { font-size: 18px; line-height: 1.6; }
+
+button {
+  margin-top: 25px;
+  padding: 12px 25px;
+  font-size: 16px;
+  border: none;
+  border-radius: 30px;
+  background: #c5a100;
+  cursor: pointer;
+}
+
+button:hover { background: #ffd700; }
+
+/* Звёзды */
+.star {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  from { transform: translateY(-10px); }
+  to { transform: translateY(100vh); }
+}
+</style>
+</head>
+<body>
+
+<!-- Музыка -->
+<audio autoplay loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card">
+  <h1>С 23 февраля!</h1>
+  <p>
+    Алтыным ❤️
+  </p>
+  <button onclick="alert('Желаю стальных нервов, бетонного здоровья, финансовой стабильности и процветания 💪❤️')">
+    Нажми
+  </button>
+</div>
+
+<script>
+// создаём падающие звёзды
+for (let i = 0; i < 80; i++) {
+  let star = document.createElement("div");
+  star.className = "star";
+  star.style.left = Math.random() * window.innerWidth + "px";
+  star.style.animationDuration = (2 + Math.random() * 3) + "s";
+  document.body.appendChild(star);
+}
+</script>
+
+</body>
+</html>
