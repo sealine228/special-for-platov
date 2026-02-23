@@ -9,30 +9,31 @@
 body {
   margin: 0;
   overflow: hidden;
-  background: linear-gradient(135deg, #1f2a1f, #3a4a2f);
+  background: linear-gradient(135deg, #2e3a87, #74b9ff);
   font-family: Arial, sans-serif;
   color: white;
+  height: 100vh;
+  position: relative;
 }
 
-/* Карточка */
 .card {
   position: relative;
   z-index: 2;
-  background: rgba(0,0,0,0.75);
+  background: rgba(255,255,255,0.1);
   padding: 40px;
   border-radius: 20px;
   width: 90%;
   max-width: 500px;
   text-align: center;
   margin: 100px auto;
-  box-shadow: 0 0 40px rgba(0,0,0,0.8);
+  box-shadow: 0 0 40px rgba(0,0,0,0.4);
   animation: fadeIn 1.5s ease forwards;
   transition: all 0.6s ease;
 }
 
 .card.opened {
-  background: rgba(0,0,0,0.88);
-  box-shadow: 0 0 60px rgba(197,161,0,0.4);
+  background: rgba(255,255,255,0.2);
+  box-shadow: 0 0 80px rgba(255, 215, 0, 0.6);
   transform: scale(1.03);
 }
 
@@ -50,20 +51,46 @@ button {
   font-size: 16px;
   border: none;
   border-radius: 30px;
-  background: #c5a100;
+  background: #ffd700;
   cursor: pointer;
   transition: 0.3s;
 }
 
 button:hover { 
-  background: #ffd700; 
+  background: #ffe066; 
   transform: scale(1.05);
 }
 
-/* Блок дела */
+.congrats {
+  display: none;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffeb3b;
+  margin-top: 20px;
+  animation: fadeLine 1s forwards;
+}
+
 .case-text {
   display: none;
-  margin-top: 30px;
+  margin-top: 20px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.7s ease, box-shadow 0.3s ease;
+}
+
+.case-text.open {
+  transform: scaleY(1);
+}
+
+.case-text:hover {
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+  transition: box-shadow 0.3s ease;
 }
 
 .divider {
@@ -82,15 +109,14 @@ button:hover {
 .verdict {
   margin-top: 20px;
   font-size: 20px;
-  color: #c5a100;
+  color: #ffd700;
   font-weight: bold;
 }
 
-/* Появление строк */
-.show .line:nth-child(2) { animation: fadeLine 1s forwards 0.5s; }
-.show .line:nth-child(3) { animation: fadeLine 1s forwards 2s; }
+.show .line:nth-child(1) { animation: fadeLine 1s forwards 0.5s; }
+.show .line:nth-child(2) { animation: fadeLine 1s forwards 1.5s; }
+.show .line:nth-child(3) { animation: fadeLine 1s forwards 2.5s; }
 .show .line:nth-child(4) { animation: fadeLine 1s forwards 3.5s; }
-.show .line:nth-child(5) { animation: fadeLine 1s forwards 5s; }
 
 @keyframes fadeLine {
   from { opacity: 0; transform: translateY(8px); }
@@ -102,18 +128,47 @@ button:hover {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Звёзды */
 .star {
   position: absolute;
-  width: 4px;
-  height: 4px;
-  background: white;
-  animation: fall linear infinite;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: fall linear infinite, twinkle 2s infinite alternate;
+  box-shadow: 0 0 3px rgba(255,255,255,0.8);
 }
 
 @keyframes fall {
   from { transform: translateY(-10px); }
-  to { transform: translateY(100vh); }
+  to { transform: translateY(110vh); }
+}
+
+@keyframes twinkle {
+  from { opacity: 0.3; }
+  to { opacity: 1; }
+}
+
+.document-btn {
+  display: inline-block;
+  margin-top: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #ffd700;
+  font-weight: bold;
+  text-decoration: underline;
+  transition: 0.3s;
+}
+
+.document-btn:hover {
+  color: #fff176;
+  text-shadow: 0 0 8px #ffd700;
+}
+
+.joke {
+  display: none;
+  font-size: 16px;
+  margin-top: 15px;
+  color: #fff176;
+  font-style: italic;
+  animation: fadeLine 1s forwards;
 }
 </style>
 </head>
@@ -124,42 +179,88 @@ button:hover {
   <h1>С 23 февраля!</h1>
   
   <div class="main-text">
-    Алтыным ❤️ <br><br>
-    Желаю стальных нервов, бетонного здоровья,
-    финансовой стабильности и процветания 💪❤️
+    Алтыным ❤️ <br>
+    Желаю здоровья, счастья, стальных нервов, финансовой стабильности и процветания
   </div>
 
-  <button onclick="openCase(this)">
+  <button onclick="showCongrats(this)">
     Нажми
   </button>
+
+ <div class="congrats" style="
+  font-size:24px;
+  font-weight:bold;
+  color:#ffeb3b;
+  text-shadow: 0 0 5px #ffeb3b, 0 0 15px #ffd700;
+  animation: glow 2s infinite alternate;
+">
+  С Днём защитника Отечества!
+</div>
+
+<style>
+@keyframes glow {
+  from { text-shadow: 0 0 5px #ffeb3b, 0 0 15px #ffd700; }
+  to { text-shadow: 0 0 10px #ffeb3b, 0 0 25px #ffd700; }
+}
+</style>
+
+  <div class="document-btn" onclick="openCase()">
+    📄 Открыть дело
+  </div>
 
   <div id="caseText" class="case-text">
     <div class="divider"></div>
     <p class="line">Возбуждено дело</p>
-    <p class="line">по факту кражи моего интереса.</p>
+    <p class="line">по факту похищения улыбок.</p>
     <p class="line">Подозреваемый установлен.</p>
-    <p class="line verdict">Приговор обжалованию не подлежит.</p>
+    <p class="line verdict">Примечания следователя:подозреваемый очарователен,обжалованию не подлежит.</p>
+  </div>
+
+  <div class="joke" id="joke">
+    Шучу, хотела поднять настроение 
   </div>
 </div>
 
 <script>
-function openCase(btn) {
-  btn.style.display = "none";
+function showCongrats(btn){
+  btn.style.display = "none"; 
+  document.getElementById("congrats").style.display = "block";
+}
 
+// Открываем дело с плавной анимацией "выдвижения"
+function openCase(){
   const card = document.querySelector(".card");
   card.classList.add("opened");
 
   let caseBlock = document.getElementById("caseText");
   caseBlock.style.display = "block";
-  caseBlock.classList.add("show");
+
+  // С плавным выдвижением
+  setTimeout(() => {
+    caseBlock.classList.add("open");
+  }, 50);
+
+  // Появление текста построчно
+  setTimeout(() => {
+    caseBlock.classList.add("show");
+  }, 600);
+
+  // Шутка появляется после анимации всех строк
+  setTimeout(()=>{
+    document.getElementById("joke").style.display = "block";
+  }, 4500);
 }
 
-// падающие звёзды
-for (let i = 0; i < 80; i++) {
+// Мерцающие разноцветные звёзды
+const colors = ["#ffffff","#ffd700","#74b9ff","#a29bfe","#ffe066"];
+for(let i=0;i<150;i++){
   let star = document.createElement("div");
-  star.className = "star";
-  star.style.left = Math.random() * window.innerWidth + "px";
-  star.style.animationDuration = (2 + Math.random() * 3) + "s";
+  star.className="star";
+  star.style.left = Math.random()*window.innerWidth+"px";
+  star.style.width = star.style.height = (1 + Math.random()*3)+"px";
+  star.style.background = colors[Math.floor(Math.random()*colors.length)];
+  star.style.animationDuration = (3 + Math.random()*5)+"s";
+  star.style.opacity = 0.3 + Math.random()*0.7;
   document.body.appendChild(star);
 }
 </script>
